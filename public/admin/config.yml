@@ -1,7 +1,7 @@
 # Decap CMS Configuration for Keishi's Blog
 
 backend:
-  name: github
+  name: git-gateway
   repo: VoidKeishi/blog
   branch: main
 
