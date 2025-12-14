@@ -1,9 +1,11 @@
 ---
-title: "Why I Write"
-date: 2025-01-10
+title: Why I Write
+date: 2025-12-14
 topic: life
-tags: ["writing", "thinking", "meta"]
-description: "On the practice of writing as a tool for thinking, and why I decided to start this blog."
+tags:
+  - writing
+description: On the practice of writing as a tool for thinking, and why I
+  decided to start this blog.
 pinned: true
 draft: false
 ---
