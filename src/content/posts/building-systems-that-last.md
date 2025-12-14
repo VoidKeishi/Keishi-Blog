@@ -67,3 +67,5 @@ Building systems that last is less about technology and more about discipline:
 
 These aren't exciting principles. They won't get you featured on Hacker News. But they're the difference between systems that survive and systems that get replaced.
 
+
+

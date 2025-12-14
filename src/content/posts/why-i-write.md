@@ -54,3 +54,5 @@ I'll try to write clearly and directly. No fluff, no buzzwords. If I don't have 
 
 Let's see where this goes.
 
+
+

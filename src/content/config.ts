@@ -51,3 +51,5 @@ export type Topic = keyof typeof topics;
 
 export const collections = { posts };
 
+
+
