@@ -46,7 +46,7 @@ const relativeTime = getRelativeTime(date);
   /* Default variant */
   .post-card {
     border-bottom: 1px solid var(--border);
-    transition: background-color var(--transition-fast);
+    position: relative;
   }
   
   .post-card:last-child {
@@ -61,17 +61,25 @@ const relativeTime = getRelativeTime(date);
     padding: 1.25rem 0;
     text-decoration: none;
     color: inherit;
+    position: relative;
   }
   
-  .post-card:hover {
-    background-color: var(--bg-secondary);
+  /* Subtle left accent on hover */
+  .post-card::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: height var(--transition-base);
   }
   
-  .post-card:hover .post-link {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-left: -1rem;
-    margin-right: -1rem;
+  .post-card:hover::before {
+    height: 60%;
   }
   
   .post-content {

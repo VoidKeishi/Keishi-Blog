@@ -124,25 +124,35 @@ const topicInfo = topics[topic];
 
   .post-item {
     border-bottom: 1px solid var(--border);
+    position: relative;
   }
 
   .post-item:last-child {
     border-bottom: none;
   }
 
+  /* Subtle left accent on hover */
+  .post-item::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: height var(--transition-base);
+  }
+
+  .post-item:hover::before {
+    height: 50%;
+  }
+
   .post-link {
     display: block;
     padding: 1.5rem 0;
     text-decoration: none;
-    transition: background-color var(--transition-fast);
-  }
-
-  .post-item:hover .post-link {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-left: -1rem;
-    margin-right: -1rem;
-    background-color: var(--bg-secondary);
   }
 
   .post-title {

@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://blog.https://keishi.vercel.app/',
+  site: 'https://keishi-blog.vercel.app/',
   vite: {
     plugins: [tailwindcss()]
   }
