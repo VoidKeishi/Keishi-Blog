@@ -1,0 +1,95 @@
+# Decap CMS Configuration for Keishi's Blog
+
+backend:
+  name: github
+  repo: VoidKeishi/blog
+  branch: main
+
+# Local development - uncomment for local testing
+# local_backend: true
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Editorial workflow for draft/review/publish states
+publish_mode: editorial_workflow
+
+collections:
+  - name: "posts"
+    label: "Blog Posts"
+    folder: "src/content/posts"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    sortable_fields: ["date", "title", "topic"]
+    view_groups:
+      - label: "Topic"
+        field: "topic"
+      - label: "Year"
+        field: "date"
+        pattern: '\d{4}'
+    fields:
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        required: true
+
+      - label: "Publish Date"
+        name: "date"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        required: true
+
+      - label: "Topic"
+        name: "topic"
+        widget: "select"
+        options:
+          - { label: "Tech", value: "tech" }
+          - { label: "Systems", value: "systems" }
+          - { label: "Society", value: "society" }
+          - { label: "Startups", value: "startups" }
+          - { label: "Life", value: "life" }
+        required: true
+
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        required: false
+        allow_add: true
+        summary: "{{fields.tag}}"
+        field:
+          label: "Tag"
+          name: "tag"
+          widget: "string"
+
+      - label: "Description"
+        name: "description"
+        widget: "text"
+        required: true
+        hint: "Brief excerpt for previews and SEO (150-160 characters ideal)"
+
+      - label: "Pinned"
+        name: "pinned"
+        widget: "boolean"
+        default: false
+        hint: "Pinned posts appear in the 'Start Here' section on the homepage"
+
+      - label: "Draft"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        hint: "Drafts won't be published to the live site"
+
+      - label: "Featured Image"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: "Optional cover image for the post"
+
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        required: true
+

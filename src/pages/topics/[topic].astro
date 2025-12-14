@@ -1,0 +1,181 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { topics, type Topic } from '../../content/config';
+import { formatDate } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+  
+  return Object.keys(topics).map(topic => ({
+    params: { topic },
+    props: {
+      posts: allPosts
+        .filter(post => post.data.topic === topic)
+        .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+    },
+  }));
+}
+
+interface Props {
+  posts: Awaited<ReturnType<typeof getCollection<'posts'>>>;
+}
+
+const { topic } = Astro.params as { topic: Topic };
+const { posts } = Astro.props;
+
+const topicInfo = topics[topic];
+---
+
+<BaseLayout 
+  title={topicInfo.name}
+  description={topicInfo.description}
+>
+  <div class="topic-page">
+    <section class="page-header">
+      <div class="container">
+        <a href="/topics" class="back-link">← All Topics</a>
+        <h1 class="page-title">{topicInfo.name}</h1>
+        <p class="page-description">{topicInfo.description}</p>
+        <p class="post-count">{posts.length} {posts.length === 1 ? 'essay' : 'essays'}</p>
+      </div>
+    </section>
+
+    <section class="posts-section">
+      <div class="container">
+        {posts.length > 0 ? (
+          <div class="posts-list">
+            {posts.map(post => (
+              <article class="post-item">
+                <a href={`/posts/${post.slug}`} class="post-link">
+                  <h2 class="post-title">{post.data.title}</h2>
+                  <p class="post-description">{post.data.description}</p>
+                  <time class="post-date" datetime={post.data.date.toISOString()}>
+                    {formatDate(post.data.date)}
+                  </time>
+                </a>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="empty-state">
+            No essays in this topic yet. Check back soon!
+          </p>
+        )}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .topic-page {
+    padding-bottom: 4rem;
+  }
+
+  .page-header {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+    line-height: 1.6;
+  }
+
+  .post-count {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .posts-section {
+    padding: 3rem 0;
+  }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-item:last-child {
+    border-bottom: none;
+  }
+
+  .post-link {
+    display: block;
+    padding: 1.5rem 0;
+    text-decoration: none;
+    transition: background-color var(--transition-fast);
+  }
+
+  .post-item:hover .post-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    background-color: var(--bg-secondary);
+  }
+
+  .post-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+    transition: color var(--transition-fast);
+  }
+
+  .post-item:hover .post-title {
+    color: var(--accent);
+  }
+
+  .post-description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+    line-height: 1.6;
+  }
+
+  .post-date {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 3rem;
+  }
+</style>
+

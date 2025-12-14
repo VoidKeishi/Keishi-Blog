@@ -1,0 +1,213 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import TopicCard from '../components/TopicCard.astro';
+import { topics, type Topic } from '../content/config';
+
+// Get all published posts
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+// Sort by date (newest first)
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+// Get pinned posts for "Start Here" section
+const pinnedPosts = sortedPosts.filter(post => post.data.pinned).slice(0, 2);
+
+// Get recent posts (excluding pinned for variety)
+const recentPosts = sortedPosts
+  .filter(post => !post.data.pinned)
+  .slice(0, 5);
+
+// If no unpinned posts, use all posts
+const displayRecentPosts = recentPosts.length > 0 ? recentPosts : sortedPosts.slice(0, 5);
+
+// Count posts per topic
+const topicCounts = Object.keys(topics).reduce((acc, topic) => {
+  acc[topic as Topic] = allPosts.filter(post => post.data.topic === topic).length;
+  return acc;
+}, {} as Record<Topic, number>);
+---
+
+<BaseLayout title="Home">
+  <div class="home-page">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-title">Welcome.</h1>
+        <p class="hero-tagline">
+          I write about technology, systems thinking, and ideas that matter.
+        </p>
+      </div>
+    </section>
+
+    <!-- Start Here Section (Pinned Posts) -->
+    {pinnedPosts.length > 0 && (
+      <section class="section start-here">
+        <div class="container">
+          <h2 class="section-title">Start Here</h2>
+          <div class="pinned-grid">
+            {pinnedPosts.map(post => (
+              <PostCard
+                title={post.data.title}
+                description={post.data.description}
+                date={post.data.date}
+                topic={post.data.topic}
+                slug={post.slug}
+                variant="featured"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Recent Writing Section -->
+    <section class="section recent-writing">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Recent Writing</h2>
+          <a href="/archive" class="view-all">View all →</a>
+        </div>
+        
+        {displayRecentPosts.length > 0 ? (
+          <div class="posts-list">
+            {displayRecentPosts.map(post => (
+              <PostCard
+                title={post.data.title}
+                description={post.data.description}
+                date={post.data.date}
+                topic={post.data.topic}
+                slug={post.slug}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="empty-state">
+            No posts yet. Check back soon, or explore the topics below.
+          </p>
+        )}
+      </div>
+    </section>
+
+    <!-- Explore Topics Section -->
+    <section class="section explore-topics">
+      <div class="container">
+        <h2 class="section-title">Explore Topics</h2>
+        <div class="topics-grid">
+          {(Object.keys(topics) as Topic[]).map(topic => (
+            <TopicCard
+              topic={topic}
+              count={topicCounts[topic]}
+              variant="compact"
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .home-page {
+    padding-bottom: 4rem;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 36ch;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Sections */
+  .section {
+    padding: 3rem 0;
+  }
+
+  .section:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .section-header .section-title {
+    margin-bottom: 0;
+  }
+
+  .view-all {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .view-all:hover {
+    color: var(--accent-hover);
+  }
+
+  /* Pinned Grid */
+  .pinned-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Posts List */
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Topics Grid */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .topics-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* Empty State */
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+  }
+</style>

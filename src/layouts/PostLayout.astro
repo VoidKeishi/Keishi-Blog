@@ -1,0 +1,281 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { topics, type Topic } from '../content/config';
+import { formatDate, getReadingTime } from '../lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  topic: Topic;
+  tags?: string[];
+  image?: string;
+  content: string;
+}
+
+const { title, description, date, topic, tags = [], image, content } = Astro.props;
+
+const topicInfo = topics[topic];
+const readingTime = getReadingTime(content);
+---
+
+<BaseLayout title={title} description={description} image={image} article={true}>
+  <article class="post-page">
+    <!-- Post Header -->
+    <header class="post-header">
+      <div class="container post-container">
+        <div class="post-meta-top">
+          <a href={`/topics/${topic}`} class="topic-link">{topicInfo.name}</a>
+          <span class="meta-separator">·</span>
+          <time datetime={date.toISOString()}>{formatDate(date)}</time>
+          <span class="meta-separator">·</span>
+          <span>{readingTime} min read</span>
+        </div>
+        
+        <h1 class="post-title">{title}</h1>
+        
+        <p class="post-description">{description}</p>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <div class="post-content">
+      <div class="container post-container">
+        <div class="prose">
+          <slot />
+        </div>
+      </div>
+    </div>
+
+    <!-- Post Footer -->
+    <footer class="post-footer">
+      <div class="container post-container">
+        {tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map(tag => (
+              <span class="tag">#{tag}</span>
+            ))}
+          </div>
+        )}
+        
+        <hr class="divider" />
+        
+        <nav class="post-nav">
+          <a href="/" class="nav-link back-link">
+            ← Back to Home
+          </a>
+          <a href="/archive" class="nav-link archive-link">
+            All Posts →
+          </a>
+        </nav>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-page {
+    padding-bottom: 4rem;
+  }
+
+  .post-container {
+    max-width: 42rem;
+  }
+
+  /* Header */
+  .post-header {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-meta-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .topic-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    transition: color var(--transition-fast);
+  }
+
+  .topic-link:hover {
+    color: var(--accent-hover);
+  }
+
+  .meta-separator {
+    color: var(--text-muted);
+  }
+
+  .post-title {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .post-description {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Content */
+  .post-content {
+    padding: 3rem 0;
+  }
+
+  .post-content .prose {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .post-content .prose :global(h2) {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .post-content .prose :global(h3) {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .post-content .prose :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .post-content .prose :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 2px;
+  }
+
+  .post-content .prose :global(a:hover) {
+    color: var(--accent-hover);
+  }
+
+  .post-content .prose :global(strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .post-content .prose :global(ul),
+  .post-content .prose :global(ol) {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .post-content .prose :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content .prose :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-muted);
+  }
+
+  .post-content .prose :global(pre) {
+    background: var(--bg-secondary);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .post-content .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  .post-content .prose :global(p code),
+  .post-content .prose :global(li code) {
+    background: var(--bg-secondary);
+    padding: 0.15em 0.35em;
+    border-radius: var(--radius-sm);
+  }
+
+  .post-content .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: 2rem 0;
+  }
+
+  .post-content .prose :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* Footer */
+  .post-footer {
+    padding-top: 0;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--accent);
+  }
+</style>
+

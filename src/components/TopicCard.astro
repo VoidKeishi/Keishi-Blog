@@ -1,0 +1,110 @@
+---
+import { topics, type Topic } from '../content/config';
+
+interface Props {
+  topic: Topic;
+  count: number;
+  variant?: 'default' | 'compact';
+}
+
+const { topic, count, variant = 'default' } = Astro.props;
+
+const topicInfo = topics[topic];
+---
+
+{variant === 'compact' ? (
+  <a href={`/topics/${topic}`} class="topic-card-compact">
+    <span class="topic-name">{topicInfo.name}</span>
+    <span class="topic-count">{count}</span>
+  </a>
+) : (
+  <a href={`/topics/${topic}`} class="topic-card card">
+    <div class="topic-header">
+      <h3 class="topic-name">{topicInfo.name}</h3>
+      <span class="topic-count">{count}</span>
+    </div>
+    <p class="topic-description">{topicInfo.description}</p>
+  </a>
+)}
+
+<style>
+  /* Default variant */
+  .topic-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .topic-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .topic-card .topic-name {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .topic-card .topic-count {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  
+  .topic-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  /* Compact variant */
+  .topic-card-compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+  
+  .topic-card-compact:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  
+  .topic-card-compact .topic-name {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .topic-card-compact .topic-count {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+</style>
+

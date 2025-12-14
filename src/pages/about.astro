@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="About" 
+  description="About Keishi's Blog: Why I write, what you'll find here, and how to connect."
+>
+  <div class="about-page">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title">About This Blog</h1>
+      </div>
+    </section>
+
+    <section class="about-content">
+      <div class="container prose-container">
+        <article class="prose">
+          <h2>Why I Write</h2>
+          <p>
+            Writing is thinking made visible. It forces clarity—you can't hide behind vague ideas 
+            when words demand precision. I write because it helps me understand the world better, 
+            and because some ideas are worth sharing.
+          </p>
+          <p>
+            This blog exists as a space for longer-form thinking that doesn't fit in tweets or 
+            conversations. It's where I work through complex problems, document lessons learned, 
+            and explore ideas that sit at the intersection of technology, systems, and human experience.
+          </p>
+          <p>
+            I believe in clear, direct writing. No fluff, no unnecessary jargon. Technical depth 
+            when the topic demands it, accessible language when it doesn't. I'd rather write one 
+            useful piece than ten forgettable ones.
+          </p>
+
+          <h2>What You'll Find</h2>
+          <p>
+            Essays organized around five core themes:
+          </p>
+          <ul>
+            <li><strong>Tech</strong> — Engineering, AI, tools, and the craft of building software</li>
+            <li><strong>Systems</strong> — Mental models, processes, and frameworks for thinking</li>
+            <li><strong>Society</strong> — Social issues, education, culture, and how we live together</li>
+            <li><strong>Startups</strong> — The founder journey, lessons learned, building companies</li>
+            <li><strong>Life</strong> — Personal essays, philosophy, and reflections on being human</li>
+          </ul>
+          <p>
+            Most pieces are meant to be useful—either teaching something practical or providing 
+            a new lens for seeing old problems. Some are more personal, documenting my own 
+            journey and the mistakes I've made along the way.
+          </p>
+
+          <h2>About Me</h2>
+          <p>
+            I'm Keishi (Phạm Phan Anh)—a software engineer and founder based in Hanoi, Vietnam. 
+            I'm currently in my final year studying Computer Science at HUST, working as a 
+            Software Project Leader at Samsung, and co-founding two startups.
+          </p>
+          <p>
+            I grew up with limited resources and taught myself to build things. That background 
+            shaped how I think: pragmatic, resourceful, focused on what actually works. I believe 
+            in using rationality to solve real problems and in building systems that make life 
+            better for people.
+          </p>
+          <p>
+            Learn more about my work at <a href="https://keishi.vercel.app/" target="_blank" rel="noopener noreferrer">https://keishi.vercel.app/</a>.
+          </p>
+
+          <h2>Colophon</h2>
+          <p>
+            This blog is built with care using:
+          </p>
+          <ul>
+            <li><strong>Framework:</strong> <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> — static site generation for speed and simplicity</li>
+            <li><strong>Styling:</strong> <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer">Tailwind CSS</a> — utility-first, customized for this design</li>
+            <li><strong>CMS:</strong> <a href="https://decapcms.org" target="_blank" rel="noopener noreferrer">Decap CMS</a> — git-backed content management</li>
+            <li><strong>Fonts:</strong> Playfair Display, Source Serif 4, JetBrains Mono, Inter</li>
+            <li><strong>Hosting:</strong> Vercel — fast global CDN</li>
+          </ul>
+          <p>
+            The design aims for warmth and readability—like a quality notebook or Sunday paper. 
+            Light mode uses warm paper tones; dark mode shifts to a sophisticated ink aesthetic.
+          </p>
+
+          <h2>Connect</h2>
+          <div class="connect-links">
+            <a href="https://keishi.vercel.app/" target="_blank" rel="noopener noreferrer" class="connect-link">
+              <span class="connect-arrow">→</span>
+              <span class="connect-label">Portfolio</span>
+              <span class="connect-value">https://keishi.vercel.app/</span>
+            </a>
+            <a href="https://github.com/VoidKeishi" target="_blank" rel="noopener noreferrer" class="connect-link">
+              <span class="connect-arrow">→</span>
+              <span class="connect-label">GitHub</span>
+              <span class="connect-value">VoidKeishi</span>
+            </a>
+            <a href="mailto:phananha4@gmail.com" class="connect-link">
+              <span class="connect-arrow">→</span>
+              <span class="connect-label">Email</span>
+              <span class="connect-value">phananha4@gmail.com</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-bottom: 4rem;
+  }
+
+  .page-header {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin: 0;
+  }
+
+  .about-content {
+    padding: 3rem 0;
+  }
+
+  .prose-container {
+    max-width: 42rem;
+  }
+
+  .prose h2 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+
+  .prose p {
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .prose ul {
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .prose li {
+    margin-bottom: 0.75rem;
+  }
+
+  .prose strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .prose a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 2px;
+    transition: color var(--transition-fast);
+  }
+
+  .prose a:hover {
+    color: var(--accent-hover);
+  }
+
+  /* Connect Links */
+  .connect-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .connect-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+
+  .connect-link:hover {
+    background: var(--bg-elevated);
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .connect-arrow {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .connect-label {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 5rem;
+  }
+
+  .connect-value {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+</style>
+

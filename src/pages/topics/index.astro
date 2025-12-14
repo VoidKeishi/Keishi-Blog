@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TopicCard from '../../components/TopicCard.astro';
+import { topics, type Topic } from '../../content/config';
+
+// Get all published posts for counting
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+// Count posts per topic
+const topicCounts = Object.keys(topics).reduce((acc, topic) => {
+  acc[topic as Topic] = allPosts.filter(post => post.data.topic === topic).length;
+  return acc;
+}, {} as Record<Topic, number>);
+---
+
+<BaseLayout 
+  title="Topics" 
+  description="Browse essays by topic: Tech, Systems, Society, Startups, and Life."
+>
+  <div class="topics-page">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title">Topics</h1>
+        <p class="page-description">
+          Browse essays by subject. Each topic represents a different lens through which I explore ideas.
+        </p>
+      </div>
+    </section>
+
+    <section class="topics-section">
+      <div class="container">
+        <div class="topics-list">
+          {(Object.keys(topics) as Topic[]).map(topic => (
+            <TopicCard topic={topic} count={topicCounts[topic]} />
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .topics-page {
+    padding-bottom: 4rem;
+  }
+
+  .page-header {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .page-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 50ch;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .topics-section {
+    padding: 3rem 0;
+  }
+
+  .topics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>
+

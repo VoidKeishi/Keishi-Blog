@@ -1,0 +1,183 @@
+---
+import { topics, type Topic } from '../content/config';
+import { formatDateShort, getRelativeTime } from '../lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  topic: Topic;
+  slug: string;
+  variant?: 'default' | 'featured';
+}
+
+const { title, description, date, topic, slug, variant = 'default' } = Astro.props;
+
+const topicInfo = topics[topic];
+const dateStr = formatDateShort(date);
+const relativeTime = getRelativeTime(date);
+---
+
+{variant === 'featured' ? (
+  <article class="post-card-featured card">
+    <a href={`/posts/${slug}`} class="post-link">
+      <span class="badge">{topicInfo.name}</span>
+      <h3 class="post-title">{title}</h3>
+      <p class="post-description">{description}</p>
+      <span class="post-meta">{dateStr}</span>
+    </a>
+  </article>
+) : (
+  <article class="post-card">
+    <a href={`/posts/${slug}`} class="post-link">
+      <div class="post-content">
+        <h3 class="post-title">{title}</h3>
+        <p class="post-description">{description}</p>
+      </div>
+      <div class="post-meta">
+        <span class="badge">{topicInfo.name}</span>
+        <span class="post-date">{relativeTime}</span>
+      </div>
+    </a>
+  </article>
+)}
+
+<style>
+  /* Default variant */
+  .post-card {
+    border-bottom: 1px solid var(--border);
+    transition: background-color var(--transition-fast);
+  }
+  
+  .post-card:last-child {
+    border-bottom: none;
+  }
+  
+  .post-card .post-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .post-card:hover {
+    background-color: var(--bg-secondary);
+  }
+  
+  .post-card:hover .post-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+  
+  .post-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .post-card .post-title {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+    transition: color var(--transition-fast);
+  }
+  
+  .post-card:hover .post-title {
+    color: var(--accent);
+  }
+  
+  .post-card .post-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .post-card .post-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .post-date {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  
+  /* Featured variant */
+  .post-card-featured {
+    display: block;
+  }
+  
+  .post-card-featured .post-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .post-card-featured .badge {
+    margin-bottom: 0.75rem;
+    display: inline-block;
+  }
+  
+  .post-card-featured .post-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+    line-height: 1.35;
+    transition: color var(--transition-fast);
+  }
+  
+  .post-card-featured:hover .post-title {
+    color: var(--accent);
+  }
+  
+  .post-card-featured .post-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .post-card-featured .post-meta {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .post-card .post-link {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .post-card .post-meta {
+      flex-direction: row;
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+</style>
+
