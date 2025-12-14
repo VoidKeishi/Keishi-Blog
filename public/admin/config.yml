@@ -2,7 +2,7 @@
 
 backend:
   name: git-gateway
-  repo: VoidKeishi/blog
+  repo: VoidKeishi/Keishi-Blog
   branch: main
 
 # Local development - uncomment for local testing
