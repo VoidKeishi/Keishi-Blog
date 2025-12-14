@@ -73,6 +73,9 @@ const socialImageURL = new URL(image, Astro.url);
     
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="Keishi's Blog RSS Feed" href="/rss.xml" />
+    
+    <!-- Netlify Identity Widget (for CMS authentication) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body class="min-h-screen flex flex-col">
     <Navbar />
@@ -98,6 +101,19 @@ const socialImageURL = new URL(image, Astro.url);
           document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
         }
       });
+    </script>
+    
+    <!-- Netlify Identity redirect handler -->
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
     </script>
   </body>
 </html>
